@@ -4,5 +4,5 @@
 
 頑張って貯めた無償ジュエル….。一体現金に換算するといくらなのか。
 
-[https://golasa72.github.io/theaterdaysEventSupportTool/](https://golasa72.github.io/theaterdaysEventSupportTool/)
+[https://golasa72.github.io/ConvertFreeJewelsToMoney/](https://golasa72.github.io/ConvertFreeJewelsToMoney/)
 
