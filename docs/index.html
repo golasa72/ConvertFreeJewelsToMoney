@@ -30,12 +30,12 @@
             margin-bottom: 1rem;
         }
     </style>
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@golasa72" />
-    <meta property="og:url" content="https://golasa72.github.io/theaterdaysEventSupportTool/" />
+    <meta property="og:url" content="https://golasa72.github.io/ConvertFreeJewelsToMoney/" />
     <meta property="og:title" content="頑張って貯めた無償ジュエルを現金換算するツール" />
     <meta property="og:description" content="頑張って貯めた無償ジュエル….。一体現金に換算するといくらなのか。" />
-    <meta property="og:image" content="https://i.imgur.com/8P6Va9d.png" />
+    <meta property="og:image" content="https://i.imgur.com/xeM2MnJ.jpg" />
 </head>
 
 <body>
@@ -117,7 +117,7 @@
                 label.innerHTML = money.toString().replace(/(\d)(?=(\d{3})+$)/g , '$1,');
                 freeJewels = document.querySelector("#freeJewels").value;
 
-                var text = "無償ジュエル " + freeJewels + '' + "個は\n" + "現金 " + money.toString().replace(/(\d)(?=(\d{3})+$)/g , '$1,') + "円 相当" + "\nhttps://golasa72.github.io/theaterdaysEventSupportTool/\n#ミリシタ";
+                var text = "無償ジュエル " + freeJewels + '' + "個は\n" + "現金 " + money.toString().replace(/(\d)(?=(\d{3})+$)/g , '$1,') + "円 相当" + "\nhttps://golasa72.github.io/ConvertFreeJewelsToMoney/\n#ミリシタ";
                 let element = document.querySelector("#tweet");
                 element.setAttribute('href', "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
                 element.setAttribute('class', 'btn btn-primary');
