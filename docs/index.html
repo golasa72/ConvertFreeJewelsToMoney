@@ -1,129 +1,41 @@
-<!DOCTYPE html>
-<html lang="ja">
+<html>
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>無償ジュエルを現金換算するツール</title>
-    <!-- BootstrapのCSS読み込み -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!-- jQuery読み込み -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- BootstrapのJS読み込み -->
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <style type="text/css">
-        label {
-            margin-top: 1em;
-        }
-
-        button {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        h1 {
-            font-size: 2.5 rem;
-        }
-
-        a {
-            margin-bottom: 1rem;
-        }
-    </style>
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:site" content="@golasa72" />
-    <meta property="og:url" content="https://golasa72.github.io/ConvertFreeJewelsToMoney/" />
-    <meta property="og:title" content="頑張って貯めた無償ジュエルを現金換算するツール" />
-    <meta property="og:description" content="頑張って貯めた無償ジュエル….。一体現金に換算するといくらなのか。" />
-    <meta property="og:image" content="https://imgur.com/a/5NtvU" />
+    <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js'></script>
+    <title>Tesseract Test</title>
 </head>
 
 <body>
-    <div class="container">
-        <h1>無償ジュエルを現金換算するツール</h1>
-        <p>頑張って貯めた無償ジュエル….。一体現金に換算するといくらなのか。</p>
-        <div id="errorArea">
-        </div>
-        <label for="freeJewels">無償ジュエルの数</label>
-        <input type="number" name="freeJewels" class="form-control" id="freeJewels" placeholder="無償ジュエルの数" min="0" max="5000000">
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary col-md-6" id="sample" onclick="get();">Enter</button>
-        </div>
-        <p>現金  
-            <span id="money">x</span>円 相当</p>
-        <a class="btn btn-primary disabled" id="tweet" href="#" role="button">Tweet</a>
+    <label for="fileInput">Choose File to OCR:</label>
+    <input type="file" id="fileInput" name="fileInput" />
+    <br />
+    <br />
+    <div id="document-content">
     </div>
-
-    <script>
-        function addError(str) {
-            const preTag = '<div class="alert alert-warning" role="alert">';
-            const postTag = '</div>';
-            let element = document.getElementById("errorArea");
-            element.innerHTML = element.innerHTML + preTag + str + postTag;
-        }
-
-        function clearError() {
-            let element = document.getElementById("errorArea");
-            element.innerHTML = "";
-        }
-
-        function validate(value, max, min, name) {
-            if (isNaN(value) || value === "") {
-                addError(name + " を入力してください。");
-                return false;
-            }
-            else if (value > max) {
-                addError(name + "は上限値(" + max + ")以下にしてください");
-                return false;
-            }
-            else if (value < min) {
-                addError(name + "は" + min + "以上にしてください");
-                return false;
-            }
-            return true;
-        }
-
-        let freeJewels = 0;
-
-        function getCount(jewel) {
-            let count = 0;
-            while (freeJewels >= jewel) {
-                count += 1;
-                freeJewels -= jewel;
-            }
-            return count;
-        }
-
-        function get() {
-
-            freeJewels = document.querySelector("#freeJewels").value;
-
-            clearError();
-
-            let isFreeJewelsValid = validate(freeJewels, 99999999999, 0, "無償ジュエルの数");
-
-            if (isFreeJewelsValid) {
-                let jewels = [8400, 4200, 2650, 1300, 760, 360, 60];
-                let jewelsPrices = [9800, 5000, 3200, 1600, 960, 480, 120];
-                let count = 0;
-                let money = 0;
-
-                for (let i = 0; i < jewels.length; i++) {
-                    count = getCount(jewels[i]);
-                    money += jewelsPrices[i] * count;
-                }
-
-                let label = document.querySelector("#money");
-                label.innerHTML = money.toString().replace(/(\d)(?=(\d{3})+$)/g , '$1,');
-                freeJewels = document.querySelector("#freeJewels").value;
-
-                var text = "無償ジュエル " + freeJewels + '' + "個は\n" + "現金 " + money.toString().replace(/(\d)(?=(\d{3})+$)/g , '$1,') + "円 相当" + "\nhttps://golasa72.github.io/ConvertFreeJewelsToMoney/\n#ミリシタ";
-                let element = document.querySelector("#tweet");
-                element.setAttribute('href', "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
-                element.setAttribute('class', 'btn btn-primary');
-            }
-        }
-    </script>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var fileInput = document.getElementById('fileInput');
+        fileInput.addEventListener('change', handleInputChange);
+    });
+
+    function handleInputChange(event) {
+        var input = event.target;
+        var file = input.files[0];
+        console.log(file);
+        Tesseract
+            // (読み込む画像, 言語) jpeg || png
+            .recognize(file, { lang: 'jpn' }) //exp: jpn, eng
+            //.ImageLike('media', lang)  //* browser only img || video || canvas
+            .progress(function (p) {
+                // 進歩状況の表示
+                console.log('progress', p)
+            })
+            // 結果のコールバック
+            .then(function (result) {
+                console.log(result)
+            });
+    }
+</script>
 
 </html>
