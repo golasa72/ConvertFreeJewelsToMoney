@@ -28,7 +28,7 @@
 
 
         input {
-            margin-bottom: 1rem;            
+            margin-bottom: 1rem;
         }
     </style>
     <meta name="twitter:card" content="summary" />
@@ -107,26 +107,56 @@
 
                 canvasContext.drawImage(img, 0, 0);
 
-                var image = canvasContext.getImageData(canvas.width / 2, (canvas.height / 2) +((canvas.height / 4) / 2), (canvas.width / 2), (canvas.height / 4)/2);
+                var image = canvasContext.getImageData(canvas.width / 2, (canvas.height / 2) + ((canvas.height / 4) / 2), (canvas.width / 2), (canvas.height / 4) / 2);
 
                 canvas.width = (canvas.width / 2);
                 canvas.height = (canvas.height / 4) / 2;
 
                 canvasContext.putImageData(image, 0, 0);
 
+                // 画像情報の取得（offsetX, offsetY, 幅、高さ）
+                const imageData = canvasContext.getImageData(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+                // imageData.dataが1pxごとのRGBAが含まれる
+                let data = imageData.data;
+
+                // ここでimageData.dataに対して画像処理を行う
+                const threshold = 150;
+                
+                const getColor = (data, i) => {
+                  // threshold < rgbの平均
+                  const avg = (data[i] + data[i+1] + data[i+2]) / 3;
+                  if (threshold < avg) {
+                    // white
+                    return 255;
+                  } else {
+                    // black
+                    return 0;
+                  }
+                };
+                
+                for (let i = 0; i < data.length; i += 4) {
+                  const color = getColor(data, i);
+                  data[i] = data[i+1] = data[i+2] = color;
+                }
+
+                // 画像情報からCanvasに書き戻す
+                canvasContext.putImageData(imageData, 0, 0);
+
                 imageURL = canvas.toDataURL();
+                document.querySelector('#preview2').src = imageURL;
 
                 Tesseract
                     .recognize(imageURL, { lang: 'jpn' }) //exp: jpn, eng
                     .progress(function (p) {
-                        // 進歩状況の表示
+                        // 進捗状況の表示
                         console.log('progress', p)
                     })
                     // 結果のコールバック
                     .then(function (result) {
                         for (let index = 0; index < result.words.length; index++) {
                             console.log(result.words[index].text)
-                            if (result.words[index].text.indexOf('【') != -1) {
+                            // if (result.words[index].text.indexOf('【') != -1) {
                                 let element = result.words[index].text.match(/[0-9]+\.?[0-9]*/g);
                                 if (element != null || element != undefined) {
                                     array.push(element);
@@ -134,7 +164,7 @@
                                 } else {
                                     console.log(element)
                                 }
-                            }
+                            // }
                         }
 
                         let label1 = document.querySelector("#jewel1");
