@@ -107,10 +107,10 @@
 
                 canvasContext.drawImage(img, 0, 0);
 
-                var image = canvasContext.getImageData(canvas.width / 2, canvas.height / 2, canvas.width, canvas.height / 4);
+                var image = canvasContext.getImageData(canvas.width / 2, (canvas.height / 2) +((canvas.height / 4) / 2), (canvas.width / 2) * 0.8, (canvas.height / 4)/2);
 
-                canvas.width = canvas.width / 2;
-                canvas.height = canvas.height / 4;
+                canvas.width = (canvas.width / 2) * 0.8;
+                canvas.height = (canvas.height / 4) / 2;
 
                 canvasContext.putImageData(image, 0, 0);
 
