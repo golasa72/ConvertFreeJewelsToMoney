@@ -48,10 +48,10 @@
         <img src="" alt="image" id="preview" style="visibility:hidden">
         <canvas id="preview2" width="0" height="0" style="background: #ffffff;"></canvas>
 
-        <p>有償ジュエル
-            <span id="jewel1">x</span>個</p>
+        <!-- <p>有償ジュエル
+            <span id="jewel1">x</span>個</p> -->
         <p>無償ジュエル
-            <span id="jewel2">x</span>個</p>
+            <span id="jewel">x</span>個</p>
         <p>現金
             <span id="money">x</span>円 相当</p>
 
@@ -96,7 +96,7 @@
 
             let img = document.querySelector('#preview');
 
-            var array = [];
+            // var array = [];
             var imageURL;
 
             img.onload = function () {
@@ -107,9 +107,9 @@
 
                 canvasContext.drawImage(img, 0, 0);
 
-                var image = canvasContext.getImageData(canvas.width / 2, (canvas.height / 2) + ((canvas.height / 4) / 2), (canvas.width / 2), (canvas.height / 4) / 2);
+                var image = canvasContext.getImageData((canvas.width / 2) + (canvas.width / 4), (canvas.height / 2) + ((canvas.height / 4) / 2), (canvas.width / 2), (canvas.height / 4) / 2);
 
-                canvas.width = (canvas.width / 2);
+                canvas.width = (canvas.width / 4);
                 canvas.height = (canvas.height / 4) / 2;
 
                 canvasContext.putImageData(image, 0, 0);
@@ -122,22 +122,22 @@
 
                 // ここでimageData.dataに対して画像処理を行う
                 const threshold = 150;
-                
+
                 const getColor = (data, i) => {
-                  // threshold < rgbの平均
-                  const avg = (data[i] + data[i+1] + data[i+2]) / 3;
-                  if (threshold < avg) {
-                    // white
-                    return 255;
-                  } else {
-                    // black
-                    return 0;
-                  }
+                    // threshold < rgbの平均
+                    const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    if (threshold < avg) {
+                        // white
+                        return 255;
+                    } else {
+                        // black
+                        return 0;
+                    }
                 };
-                
+
                 for (let i = 0; i < data.length; i += 4) {
-                  const color = getColor(data, i);
-                  data[i] = data[i+1] = data[i+2] = color;
+                    const color = getColor(data, i);
+                    data[i] = data[i + 1] = data[i + 2] = color;
                 }
 
                 // 画像情報からCanvasに書き戻す
@@ -145,7 +145,8 @@
 
                 imageURL = canvas.toDataURL();
                 document.querySelector('#preview2').src = imageURL;
-
+                let str;
+                let array = [];
                 Tesseract
                     .recognize(imageURL, { lang: 'jpn' }) //exp: jpn, eng
                     .progress(function (p) {
@@ -157,37 +158,43 @@
                         for (let index = 0; index < result.words.length; index++) {
                             console.log(result.words[index].text)
                             // if (result.words[index].text.indexOf('【') != -1) {
-                                let element = result.words[index].text.match(/[0-9]+\.?[0-9]*/g);
-                                if (element != null || element != undefined) {
-                                    array.push(element);
-                                    console.log(element)
-                                } else {
-                                    console.log(element)
-                                }
+                            let element = result.words[index].text.match(/[0-9]+\.?[0-9]*/g);
+                            if (element != null || element != undefined) {
+                                str = element;
+                                // array.push(element);
+                                console.log(element)
+                            } else {
+                                console.log(element)
+                            }
                             // }
                         }
 
-                        let label1 = document.querySelector("#jewel1");
-                        let label2 = document.querySelector("#jewel2");
+                        // let label1 = document.querySelector("#jewel1");
+                        // let label2 = document.querySelector("#jewel2");
+                        let label = document.querySelector("#jewel");
 
-                        label1.innerHTML = array[0] + '';
-                        label2.innerHTML = array[1] + '';
+                        label.innerHTML = str + '';
+
+                        // label1.innerHTML = array[0] + '';
+                        // label2.innerHTML = array[1] + '';
 
                         let jewels = [8400, 4200, 2650, 1300, 760, 360, 60];
                         let jewelsPrices = [9800, 5000, 3200, 1600, 960, 480, 120];
                         let count = 0;
                         let money = 0;
 
-                        freeJewels = array[1];
+                        freeJewels = str;
+                        // freeJewels = array[1];
 
                         for (let i = 0; i < jewels.length; i++) {
                             count = getCount(jewels[i]);
                             money += jewelsPrices[i] * count;
                         }
 
-                        let label = document.querySelector("#money");
-                        label.innerHTML = money.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,');
-                        var text = "無償ジュエル " + array[1] + '' + "個は\n" + "現金 " + money.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,') + "円 相当" + "\nhttps://golasa72.github.io/ConvertFreeJewelsToMoney/\n#ミリシタ";
+                        let label2 = document.querySelector("#money");
+                        label2.innerHTML = money.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+                        // var text = "無償ジュエル " + array[1] + '' + "個は\n" + "現金 " + money.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,') + "円 相当" + "\nhttps://golasa72.github.io/ConvertFreeJewelsToMoney/\n#ミリシタ";
+                        var text = "無償ジュエル " + str + '' + "個は\n" + "現金 " + money.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,') + "円 相当" + "\nhttps://golasa72.github.io/ConvertFreeJewelsToMoney/\n#ミリシタ";
                         let element = document.querySelector("#tweet");
                         element.setAttribute('href', "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
                         element.setAttribute('class', 'btn btn-primary');
