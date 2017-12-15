@@ -12,7 +12,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- BootstrapのJS読み込み -->
     <script src="js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src='https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js'></script>
     <style type="text/css">
         h1 {
@@ -47,20 +46,8 @@
     <div class="container">
         <h1>無償ジュエルを現金換算するツール</h1>
         <p>頑張って貯めた無償ジュエル….。一体現金に換算するといくらなのか。</p>
-        <p>ガシャ画面のスクリーンショットをアップすると解析が始まります。</p>
-
+        <p>ガシャ画面のスクリーンショットをアップロードすると解析が始まります。</p>
         <input type="file" id="fileInput" name="fileInput" />
-
-        <!-- <div id="errorArea">
-        </div>
-        <label for="freeJewels">無償ジュエルの数</label>
-        <input type="number" name="freeJewels" class="form-control" id="freeJewels" placeholder="無償ジュエルの数" min="0" max="5000000">
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary col-md-6" id="sample" onclick="get();">Enter</button>
-        </div>
-        <p>現金
-            <span id="money">x</span>円 相当</p> -->
-
         <img src="" alt="image" id="preview" style="visibility:hidden">
         <canvas id="preview2" width="0" height="0" style="background: #ffffff;"></canvas>
 
@@ -114,7 +101,7 @@
 
             var array = [];
             var imageURL;
-            
+
             img.onload = function () {
                 const canvasWidth = img.width;
                 const canvasHeight = img.height;
@@ -173,9 +160,7 @@
 
                         let label = document.querySelector("#money");
                         label.innerHTML = money.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,');
-
-                        // freeJewels = document.querySelector("#freeJewels").value;
-                        var text = "無償ジュエル " + label2 + '' + "個は\n" + "現金 " + money.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,') + "円 相当" + "\nhttps://golasa72.github.io/ConvertFreeJewelsToMoney/\n#ミリシタ";
+                        var text = "無償ジュエル " + array[1] + '' + "個は\n" + "現金 " + money.toString().replace(/(\d)(?=(\d{3})+$)/g, '$1,') + "円 相当" + "\nhttps://golasa72.github.io/ConvertFreeJewelsToMoney/\n#ミリシタ";
                         let element = document.querySelector("#tweet");
                         element.setAttribute('href', "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text));
                         element.setAttribute('class', 'btn btn-primary');
